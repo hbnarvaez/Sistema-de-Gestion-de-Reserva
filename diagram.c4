@@ -1,0 +1,124 @@
+// UTPL SmartCampus
+// Sistema de Gestion de Espacios
+
+specification {
+  element system
+  element container
+  element container_1
+  element container_2
+  tag ui {
+    color #33B074
+  }
+  tag version1 {
+    color #D6409F
+  }
+  tag warn
+}
+
+model {
+
+
+  presentacion = system "Capa de Presentación" {
+    description "Aplicación web accesible desde navegador"
+          style {
+        shape browser}
+    user = container "Usuarios" {
+      description "Estudiantes, docentes y personal administrativo"
+        style {
+        shape person
+        }
+    }    frontend = container 'Navegador Web'{
+      description 'Acceso desde cualquier browser'
+      style {
+        shape browser
+      }
+    }
+  // Relacion entre contenedores
+  user -> frontend 'Accede al navegador'
+  }
+
+
+  negocio = system "Capa de Negocio" {
+    description "Gestión de reservas, validaciones y control de acceso"
+        style {
+        shape document}
+    reservas = container 'Gestion de Reservas'{
+    }
+    validacion = container 'Validacion de Reglas'{
+    }
+    acceso = container 'Contro de Acceso'{
+    }
+    notificaciones = container 'Notificaciones'{
+    }
+
+    // Relacion entre contenedores
+     reservas -> validacion'Solicita Reservacion'
+     validacion -> acceso 'Permisos de Acceso'
+     acceso -> notificaciones ' Envio de Notificaciones'
+  }
+  presentacion -> negocio "Solicita operaciones"
+
+  
+  datos= system "Capa de Datos" {
+    description "Almacenamiento de usuarios, espacios y reservas"
+        style {
+        shape storage}
+    usuario = container 'Usuario'{
+    }
+    espacio = container 'Espacio'{
+    }
+    reserva = container 'Reserva'{
+    }
+
+   // Relacion entre contenedores
+     usuario -> espacio'Verifica Espacio'
+     espacio -> reserva'Solicita Reserva'
+  }
+  negocio -> datos "Lee/escribe datos"
+
+
+  sso = system "SSO" {
+    description "Autenticación institucional"
+  }
+  negocio -> sso "Autenticación"
+
+
+
+  email = system "Correo Institucional" {
+    description "Sistema de notificaciones"
+  }
+  negocio -> email "Envía notificaciones"
+
+}
+
+
+views {
+
+  view index {
+    title 'Landscape view'
+
+    include *
+    style presentacion {
+      color green
+    }
+    style negocio{
+      color amber
+    }
+    style  datos {
+      color indigo
+    }
+  }
+
+
+  view container of presentacion{
+    include *
+  }
+
+  view container_1 of negocio{
+    include *
+  }
+
+  view container_2 of datos{
+    include *
+  }
+}
