@@ -1,0 +1,72 @@
+// Tutorial:
+// https://likec4.dev/tutorial/
+
+specification {
+  element person{
+    style {
+      shape person
+      color green
+    }
+  }
+  element  softwareSystem
+}
+
+model {
+  estudiante = person 'Estudiante' {
+    description 'Consultar disponibilidad y reservar espacios autorizados'
+  }
+
+  docente = person 'Docente' {
+    description 'Solicita reservas de aulas y laboratorios para actividades académicas'
+  }
+
+  administrativo = person 'Personal Administrativo' {
+    description 'Gestiona solicitudes y aplica políticas institucionales'
+  }
+
+  laboratorio = person 'Responsable de Laboratorio' {
+    description 'Valida y autoriza el uso de laboratorios especializados'
+  }
+
+  seguridad = person 'Personal de Seguridad' {
+    description 'Verifica accesos y registra incidencias'
+  }
+
+  administrador_it = person 'Administrador IT' {
+    description 'Administra parámetros generales e integraciones institucionales'
+  }
+
+  sgr = softwareSystem 'Sistema de Gestión de Reservas (SGR)' {
+    description 'Gestiona reservas, aprobaciones, control de acceso y seguimiento del uso de espacios'
+  }
+
+  sso = softwareSystem 'Sistema de Autenticación Institucional' {
+    description 'Valida la identidad de los usuarios institucionales'
+    style {
+      color amber
+    }
+  }
+
+  correo = softwareSystem 'Servicio de Correo Institucional' {
+    description 'Envía notificaciones relacionadas con las reservas'
+    style {
+      color amber
+    }
+  }
+
+  // Relaciones
+  estudiante -> sgr 'Consulta y reserva espacios'
+  docente -> sgr 'Solicita reservas académicas'
+  administrativo -> sgr 'Gestiona y aprueba reservas'
+  laboratorio -> sgr 'Autoriza uso de laboratorios'
+  seguridad -> sgr 'Verifica ingresos e incidencias'
+  administrador_it -> sgr 'Administra el sistema'
+  sgr -> sso 'Valida identidad de usuarios'
+  sgr -> correo 'Envia mensajes'
+}
+
+views {
+  view contexto {
+    title 'Diagrama de Contexto - Sistema de Gestión de Reservas (SGR)'
+  }
+}
