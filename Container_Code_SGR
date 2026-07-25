@@ -1,0 +1,90 @@
+// Tutorial:
+// https://likec4.dev/tutorial/
+
+specification {
+  element person{
+    style {
+      shape person
+      color green
+    }
+  }
+  element  softwareSystem
+  element container
+}
+
+model {
+  usuario_inst = person 'Usuario Institucional' {
+    description 'Consultar, Gestionar, Administrar, Autorizar y Controlar el uso de los espacios de la UTPL'
+  }
+
+  sso = softwareSystem 'Sistema de Autenticación Institucional' {
+    description 'Valida la identidad de los usuarios institucionales'
+    style {
+      color amber
+    }
+  }
+
+  correo = softwareSystem 'Servicio de Correo Institucional' {
+    description 'Envía notificaciones relacionadas con las reservas'
+    style {
+      color amber
+    }
+  } 
+
+  sgr = softwareSystem 'Sistema de Gestión de Reservas (SGR)' {
+    web = container 'Aplicacion Web' {technology 'React'
+    description 'Permite consultar disponibilidad y gestionar reservas'
+    style {
+      shape browser
+      color indigo
+      }
+    }
+    api = container 'API Backend' {technology 'Node.js + Express.js'
+    description 'Gestiona la lógica de negocio y validaciones'
+    style {
+      color indigo
+      }
+    }
+    db = container 'Base de Datos' {technology 'PostgreSQL'
+    description 'Almacena usuarios, espacios y reservas'
+    style {
+      shape storage
+      color indigo
+      }
+    }
+    cache = container 'Redis Cache' {technology 'Redis'
+    description 'Optimiza consultas frecuentes'
+    style {
+      shape storage
+      color indigo
+      }
+    }
+  }
+
+  // Relaciones
+  usuario_inst -> web 'Consulta y gestiona espacios'
+
+  web -> api 'HTTPS / REST'
+
+  api -> db 'Lee y escribe datos'
+  api -> cache 'Lee y almacena cache'
+
+  api -> sso 'Valida identidad'
+  api -> correo 'Envia notificaciones'  
+
+}
+
+views {
+  view of sgr {
+    title 'Diagrama de Contenedores - Sistema de Gestión de Reservas (SGR)'
+    include web
+    include api
+    include db
+    include cache
+
+    include usuario_inst
+    include sso
+    include correo
+  }
+}
+  
