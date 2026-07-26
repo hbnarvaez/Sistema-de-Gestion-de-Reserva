@@ -1,5 +1,5 @@
-
-
+// Tutorial:
+// https://likec4.dev/tutorial/
 
 specification {
   element person {
@@ -41,7 +41,7 @@ model {
       description 'Administra reservas,modificaciones y cancelaciones'
       style {
         shape component
-        color secondary
+        color blue
       }
     }
     acceso = component 'Modulo de Control de Acceso'{
@@ -82,12 +82,8 @@ model {
   reservas -> notificaciones 'Genera notificaciones'
   reservas -> reportes 'Genera informacion estadistica'
 
-  auth -> api 'Solicita autenticacion'
-  espacio -> api 'Consulta disponibilidad'
-  reservas -> api 'Gestiona reservas'
-  acceso -> api 'Valida ingresos'
-  notificaciones -> api 'Obtiene notificaciones'
-  reportes -> api 'Consulta metricas'
+  web -> api 'Consume servicios REST'
+  
 
 }
 
@@ -96,5 +92,7 @@ views {
   view of web {
     title 'Diagrama de Componentes - Aplicacion Web'
     include *
+
+    include api
   }
 }
