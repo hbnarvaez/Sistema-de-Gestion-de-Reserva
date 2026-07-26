@@ -1,0 +1,100 @@
+
+
+
+specification {
+  element person {
+    style {
+      shape person
+      color green
+    }
+  }
+  element component
+  element container
+}
+
+
+model {
+
+  usuario_inst = person 'Usuario Institucional' {
+    description 'Utiliza el sistema para consultar disponibilidad, reservar espacios y gestionar solicitudes'
+  }
+  web = container 'Aplicacion Web' {
+    style {
+      shape browser
+    }
+    
+    auth = component 'Modulo de Autenticacion'{
+      description 'Gestiona el acceso de usuarios al sistema'
+      style {
+        shape component
+        color secondary
+      }
+    }
+    espacio = component 'Modulo de Consulta de Espacios'{
+      description 'Permite consultar dsiponibilidad de espacios'
+      style {
+        shape component
+        color secondary
+      }
+    }
+    reservas = component 'Modulo de Gestion de Reservas'{
+      description 'Administra reservas,modificaciones y cancelaciones'
+      style {
+        shape component
+        color secondary
+      }
+    }
+    acceso = component 'Modulo de Control de Acceso'{
+      description 'Gestiona check-in y validación de ingreso'
+      style {
+        shape component
+        color secondary
+      }
+    }
+    notificaciones = component 'Modulo de Notificaciones'{
+      description 'Presenta alertas, recordatorios y confirmaciones'
+      style {
+        shape component
+        color secondary
+      }  
+    }
+    reportes = component 'Modulo de Reportes'{
+      description 'Genera indicadores y métricas de ocupación'
+      style {
+        shape component
+        color secondary
+      }  
+    }
+  }
+  api = container 'API Backend' {
+    description 'Gestiona la logica de negocio y validaciones del sistema'
+    technology 'Node.js + Express.js'
+    style {
+      color indigo
+    }
+  }
+
+  //Relaciones
+  usuario_inst -> auth 'Accede al sistema'
+  auth -> espacio 'Permite acceso a funcionalidades'
+  espacio -> reservas 'Inicia solicitud de reservas'
+  reservas -> acceso 'Valida acceso a espacios'
+  reservas -> notificaciones 'Genera notificaciones'
+  reservas -> reportes 'Genera informacion estadistica'
+
+  auth -> api 'Solicita autenticacion'
+  espacio -> api 'Consulta disponibilidad'
+  reservas -> api 'Gestiona reservas'
+  acceso -> api 'Valida ingresos'
+  notificaciones -> api 'Obtiene notificaciones'
+  reportes -> api 'Consulta metricas'
+
+}
+
+
+views {
+  view of web {
+    title 'Diagrama de Componentes - Aplicacion Web'
+    include *
+  }
+}
