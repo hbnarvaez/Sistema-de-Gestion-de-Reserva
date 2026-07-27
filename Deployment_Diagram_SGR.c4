@@ -1,0 +1,84 @@
+// Tutorial:
+// https://likec4.dev/tutorial/
+
+specification {
+  element person {
+    style {
+      shape person
+      color green
+    }
+  }
+  element node 
+  element container
+}
+
+model {
+usuario = person 'Usuarios Institucionales' {
+  description 'Acceden al Sistema de Gestión de Reservas'
+}
+  
+cloud = node 'Infraestructura Cloud (Azure / AWS)'{
+  servidor = node 'Ubuntu Server 24.04 LTS'{
+    docker = node 'Docker Engine'{
+      
+      web = container 'Aplicacion Web'{
+        technology 'React'
+        description 'Interfaz principal del sistema'
+      }
+      api = container 'API Backend'{
+        technology 'Node.js + Express.js'      
+        description 'Gestiona la lógica de negocio'
+      }
+      db = container 'PostgreSQL' {     
+        technology 'PostgreSQL'  
+        description 'Almacena usuarios, espacios y reservas'
+      }
+      cache = container 'Redis Cache' {
+        technology 'Redis'
+        description 'Optimiza consultas frecuentes'
+     }  
+    }  
+  }
+}
+
+sso = node 'Sistema de Autenticación Institucional (SSO)'{
+  description 'Valida credenciales institucionales'
+  style {
+    color amber
+  }
+  }
+correo = node 'Servicio de Correo Institucional'{
+  description 'Envía notificaciones a los usuarios'
+  style {
+    color amber
+  }
+  }
+
+// Relaciones
+usuario -> web 'Acceso mediante navegador'
+web -> api 'HTTPS / REST'
+api -> db 'Lee y escribe datos'
+api -> cache 'Consulta y almacena cache'
+api -> sso 'Valida identidad'
+api -> correo 'Envía notificaciones'
+}
+
+views {
+  view deployment {
+    title 'Diagrama de Despliegue - Sistema de Gestión de Reservas (SGR)'
+        
+    include usuario
+
+    include cloud
+    include servidor  
+    include docker
+
+    include web
+    include api
+    include db
+    include cache
+
+    include sso
+    include correo
+  }
+}
