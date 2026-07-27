@@ -1,0 +1,131 @@
+// Tutorial:
+// https://likec4.dev/tutorial/
+
+specification {
+  element component
+  element container
+}
+
+model {
+
+  web = container 'Aplicacion Web' {
+    description 'Interfaz principal del Sistema de Gestión de Reservas'
+    technology 'React'
+    style {
+      shape browser
+      color indigo
+    }
+  }
+  api = container 'API Backend' {
+    style {
+    }
+    
+    auth = component 'Servicio de Autenticacion'{
+      description 'Gestiona autenticacion e integracion con SSO'
+      style {
+        shape component
+        color secondary
+      }
+    }
+    espacios = component 'Servicio de Espacios'{
+      description 'Administra el catálogo institucional de espacios'
+      style {
+        shape component
+        color secondary
+      }
+    }
+    reservas = component 'Servicio de Reservas'{
+      description 'Gestiona reservas y aprobaciones'
+      style {
+        shape component
+        color blue
+      }
+    }
+    acceso = component 'Servicio de Control de Acceso'{
+      description 'Valida check-in e ingresos'
+      style {
+        shape component
+        color secondary
+      }
+    }
+    notificaciones = component 'Servicio de Notificaciones'{
+      description 'Gestiona alertas y comunicaciones'
+      style {
+        shape component
+        color secondary
+      }  
+    }
+    reportes = component 'Servicio de Reportes'{
+      description 'Genera indicadores y métricas'
+      style {
+        shape component
+        color secondary
+      }  
+    }
+      auditoria = component 'Servicio de Auditoria'{
+      description 'Registra eventos e incidencias'
+      style {
+        shape component
+        color secondary
+      }  
+    }
+  }
+  
+  db = container 'Base de Datos' {
+    description 'Almacena usuarios, espacios y reservas'
+    technology 'PostgreSQL'
+    style {
+      shape cylinder
+      color indigo
+    }
+  }
+    cache = container 'Redis Cache' {
+    description 'Optimiza consultas frecuentes'
+    technology 'Redis'
+    style {
+      shape cylinder
+      color indigo
+    }
+  }  
+    sso = container 'Sistema de Autenticación Institucional'{
+    description 'Valida credenciales institucionales'
+    style {
+      color amber
+    }
+  }  correo = container 'Servicio de Correo Institucional'{
+    description'Envía notificaciones a los usuarios'
+    style {
+      color amber
+    }
+  }
+
+  //Relaciones
+  web -> api 'Consume servicios REST'
+
+  auth -> espacios 'Acceso autorizado'
+  espacios -> reservas 'Informacion de espacios'
+  reservas -> acceso 'Valida ingresos'
+  reservas -> notificaciones 'Genera alertas'
+  reservas -> reportes 'Genera metricas'
+  reservas -> auditoria 'Registra eventos'
+
+  api -> db ''
+  api -> cache ''
+  api -> sso ''
+  api -> correo ''
+  
+}
+
+
+views {
+  view of api {
+    title 'Diagrama de Componentes - API Backend'
+    include *
+
+    include web
+    include db
+    include cache
+    include  sso
+    include  correo
+  }
+}
